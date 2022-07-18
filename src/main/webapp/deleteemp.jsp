@@ -21,7 +21,7 @@
 	String source="Delete Employee";
 	String message="<h1>Error while "+source+"</h1>";
 	PrintWriter out1 = response.getWriter();
-	Employee newemp = (Employee)request.getAttribute("deleteemp");
+	Employee newemp = new Employee();
 	String id = request.getParameter("Emp_Id");
 	try {
 			Validator.checkStringForParseInt(id);

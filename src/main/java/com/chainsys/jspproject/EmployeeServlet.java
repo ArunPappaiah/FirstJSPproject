@@ -34,8 +34,8 @@ public class EmployeeServlet extends HttpServlet {
         super();
     }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+ //   @Override
+/*	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("submit").equals("ADD EMPLOYEE")) {
 			Employee newemp = new Employee();
 			request.setAttribute("addemp",newemp);
@@ -51,7 +51,7 @@ public class EmployeeServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+/*	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Employee> allEmployees = EmployeeDao.getAllEmployee();
 		request.setAttribute("allemp", allEmployees);
 		RequestDispatcher rd = request.getRequestDispatcher("getallemp.jsp");
@@ -61,7 +61,7 @@ public class EmployeeServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+/*	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Employee newemp = new Employee();
 		request.setAttribute("updateemp", newemp);
@@ -72,11 +72,11 @@ public class EmployeeServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+/*	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Employee newemp = new Employee();
 		request.setAttribute("deleteemp", newemp);
 		RequestDispatcher rd = request.getRequestDispatcher("deleteemp.jsp");
 		rd.forward(request, response);
 	}  
-
+    */
 }

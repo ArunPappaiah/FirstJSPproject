@@ -22,7 +22,7 @@
 	String source="Update Employee";
 	String message="<h1>Error while "+source+"</h1>";
 	PrintWriter out1 = response.getWriter();
-	Employee newemp = (Employee)request.getAttribute("updateemp");
+	Employee newemp = new Employee();
 	//System.out.println("Enter Employee Id :");
 	String id = request.getParameter("Emp_Id");
 	try {
@@ -166,7 +166,6 @@
 	System.out.println(result);
 	
 	out1.println("<div>Employee  Updated " + result + "</div>");
-
 	%>
 	</body>
 </html>
