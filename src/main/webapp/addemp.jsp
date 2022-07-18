@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    	<%@ page import="java.util.List" %>
+ <%@ page import="java.io.PrintWriter" %>
+ <%@ page import= "com.chainsys.jspproject.dao.EmployeeDao"%>
+ <%@ page import= "com.chainsys.jspproject.pojo.Employee"%>
+ <%@ page import="java.io.IOException" %>
+ <%@ page import= "java.text.ParseException"%>
+ <%@ page import= "java.util.Date" %>
+ <%@ page import= "java.text.SimpleDateFormat" %>
+  <%@ page import= "com.chainsys.jspproject.commonutil.Validator"%>
+ <%@ page import= "com.chainsys.jspproject.commonutil.ExceptionManager"%>
+ <%@ page import="com.chainsys.jspproject.commonutil.InvalidInputDataException"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,37 +18,149 @@
 <title>Add Employee</title>
 </head>
 <body>
-	<form action="EmployeeServlet" method="post">
-		<!--need to mention method = post  -->
-		<center>
-			<div>
-				ID : <input type='text' name='Emp_Id' placeholder="Employee Id">
-			</div>
-			<div>
-				First Name : <input type='text' name='fname' placeholder="First name">
-			</div>
-			<div>
-				Last Name : <input type='text' name='lname' placeholder="Last name">
-			</div>
-			<div>
-				E-mail : <input type='text' name='mail' placeholder="example@gmail.com">
-			</div>
-			<div>
-				Phone-No : <input type='text' name='Phone_no' placeholder="phone">
-			</div>
-			<div>
-				Hire Date : <input type='text' name='Date' placeholder="dd/MM/yyyy">
-			</div>
-			<div>
-				Job ID : <input type='text' name='Job_Id' placeholder="Job Id">
-			</div>
-			<div>
-				Salary : <input type='text' name='Salary' placeholder="Salary">
-			</div>
-			<div>
-				<input type='submit' name='submit' value='ADD EMPLOYEE'>
-			</div>
-		</center>
-	</form>
+	<%
+	String source="AddNewEmployee";
+	String message="<h1>Error while "+source+"</h1>";
+    PrintWriter out1 = response.getWriter();
+	Employee newemp = (Employee)request.getAttribute("addemp");
+	String id = request.getParameter("Emp_Id");
+	try {
+		Validator.checkStringForParseInt(id);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Employee id input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	int empId = Integer.parseInt(id);
+	try {
+		Validator.checkNumberForGreaterThanZero(empId);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Employee id input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	Employee emp = EmployeeDao.getEmployeeById(empId);
+	if (emp == null) {
+		System.out.println("Employee Doesn't Exist For Id " + empId);
+		return;
+	}
+	newemp.setEmp_id(empId);
+	String fName = request.getParameter("fname");
+	try {
+		Validator.checkCharLessThanTwenty(fName);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in First Name input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	try {
+		Validator.checkDataOnlyString(fName);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in First Name input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setFirst_name(fName);
+	String lName = request.getParameter("lname");
+	try {
+		Validator.checkCharLessThanTwenty(lName);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Last Name input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	try {
+		Validator.checkDataOnlyString(lName);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Last Name input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setLast_name(lName);
+	String eMail = request.getParameter("mail");
+	try {
+		Validator.checkMailContainsAtsymbol(eMail);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in email input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setEmail(eMail);
+	String num = request.getParameter("Phone_no");
+	try {
+		Validator.checkStringForParseInt(num);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in phone_no input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	try {
+		Validator.checkPhoneNumberLessThanTenDigits(num);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in phone_no input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setPhone_number(num);
+	String dateFormat = "dd/MM/yyyy";
+	try {
+		newemp.setHire_date(new SimpleDateFormat(dateFormat).parse(request.getParameter("Date")));
+	} catch (ParseException e) {
+		e.printStackTrace();
+	} 
+	
+	// -----------------------------------------------------
+	String jobId = request.getParameter("Job_Id");
+	try {
+		Validator.checkCharLessThanTwenty(jobId);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Job Id input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setJob_id(jobId);
+	String salary = request.getParameter("Salary");
+	float sal = Float.parseFloat(salary);
+	try {
+		Validator.checkSalaryLessThanTenDigit(sal);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Salary input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	try {
+
+		Validator.checkNumberForGreaterThanZero(sal);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Salary input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	try {
+		Validator.checkSalaryOnlyNumbers((int) sal);
+	} catch (InvalidInputDataException err) {
+		message +=" Error in Salary input </p>";
+		String errorPage=ExceptionManager.handleException(err, source, message);
+		out.print(errorPage);
+		return;
+	}
+	newemp.setSalary(sal);
+	int result = EmployeeDao.insertEmployee(newemp);
+	System.out.println(result);
+    
+	out1.println("<div> Added New Employee : " + result + "</div>");
+	%>
 </body>
 </html>
